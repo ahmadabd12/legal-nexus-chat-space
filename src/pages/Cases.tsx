@@ -64,18 +64,27 @@ const Cases: React.FC = () => {
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'active': return 'نشط';
+      case 'completed': return 'مكتمل';
+      case 'archived': return 'مؤرشف';
+      default: return status;
+    }
+  };
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Legal Cases
+          القضايا القانونية
         </Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
           onClick={() => setOpenDialog(true)}
         >
-          New Case
+          قضية جديدة
         </Button>
       </Box>
 
@@ -84,20 +93,20 @@ const Cases: React.FC = () => {
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <FilterList fontSize="small" color="action" />
           <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>Status</InputLabel>
+            <InputLabel>الحالة</InputLabel>
             <Select
               value={statusFilter}
-              label="Status"
+              label="الحالة"
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <MenuItem value="all">All Cases</MenuItem>
-              <MenuItem value="active">Active</MenuItem>
-              <MenuItem value="completed">Completed</MenuItem>
-              <MenuItem value="archived">Archived</MenuItem>
+              <MenuItem value="all">جميع القضايا</MenuItem>
+              <MenuItem value="active">نشط</MenuItem>
+              <MenuItem value="completed">مكتمل</MenuItem>
+              <MenuItem value="archived">مؤرشف</MenuItem>
             </Select>
           </FormControl>
           <Typography variant="body2" color="text.secondary">
-            {filteredCases.length} case{filteredCases.length !== 1 ? 's' : ''}
+            {filteredCases.length} قضية
           </Typography>
         </Box>
       </Card>
@@ -114,7 +123,7 @@ const Cases: React.FC = () => {
                   </Typography>
                   <Chip
                     icon={getStatusIcon(case_.status)}
-                    label={case_.status}
+                    label={getStatusText(case_.status)}
                     color={getStatusColor(case_.status) as any}
                     size="small"
                   />
@@ -126,13 +135,13 @@ const Cases: React.FC = () => {
                 
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Created: {case_.createdAt.toLocaleDateString()}
+                    الإنشاء: {case_.createdAt.toLocaleDateString('ar-QA')}
                   </Typography>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Updated: {case_.updatedAt.toLocaleDateString()}
+                    التحديث: {case_.updatedAt.toLocaleDateString('ar-QA')}
                   </Typography>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Messages: {case_.messages.length}
+                    الرسائل: {case_.messages.length}
                   </Typography>
                 </Box>
 
@@ -143,15 +152,15 @@ const Cases: React.FC = () => {
                       label={tag}
                       size="small"
                       variant="outlined"
-                      sx={{ mr: 0.5, mb: 0.5 }}
+                      sx={{ ml: 0.5, mb: 0.5 }}
                     />
                   ))}
                   {case_.tags.length > 3 && (
                     <Chip
-                      label={`+${case_.tags.length - 3} more`}
+                      label={`+${case_.tags.length - 3} المزيد`}
                       size="small"
                       variant="outlined"
-                      sx={{ mr: 0.5, mb: 0.5 }}
+                      sx={{ ml: 0.5, mb: 0.5 }}
                     />
                   )}
                 </Box>
@@ -163,7 +172,7 @@ const Cases: React.FC = () => {
                   onClick={() => navigate(`/cases/${case_.id}`)}
                   startIcon={<PlayArrow />}
                 >
-                  Open Case
+                  فتح القضية
                 </Button>
               </CardActions>
             </Card>
@@ -175,17 +184,17 @@ const Cases: React.FC = () => {
         <Card sx={{ textAlign: 'center', py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
-              {statusFilter === 'all' ? 'No cases yet' : `No ${statusFilter} cases`}
+              {statusFilter === 'all' ? 'لا توجد قضايا بعد' : `لا توجد قضايا ${getStatusText(statusFilter)}`}
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Create your first case to get started with legal research
+              أنشئ قضيتك الأولى للبدء في البحث القانوني
             </Typography>
             <Button
               variant="contained"
               onClick={() => setOpenDialog(true)}
               startIcon={<Add />}
             >
-              Create New Case
+              إنشاء قضية جديدة
             </Button>
           </CardContent>
         </Card>
@@ -193,12 +202,12 @@ const Cases: React.FC = () => {
 
       {/* New Case Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Create New Case</DialogTitle>
+        <DialogTitle>إنشاء قضية جديدة</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Case Title"
+            label="عنوان القضية"
             fullWidth
             variant="outlined"
             value={newCaseTitle}
@@ -207,7 +216,7 @@ const Cases: React.FC = () => {
           />
           <TextField
             margin="dense"
-            label="Description"
+            label="الوصف"
             fullWidth
             multiline
             rows={3}
@@ -217,13 +226,13 @@ const Cases: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button onClick={() => setOpenDialog(false)}>إلغاء</Button>
           <Button
             onClick={handleCreateCase}
             variant="contained"
             disabled={!newCaseTitle.trim()}
           >
-            Create Case
+            إنشاء القضية
           </Button>
         </DialogActions>
       </Dialog>

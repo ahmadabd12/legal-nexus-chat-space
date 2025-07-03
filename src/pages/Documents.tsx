@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Chip,
-  Grid2 as Grid,
+  Grid,
   ToggleButton,
   ToggleButtonGroup,
   CircularProgress,
@@ -139,7 +139,7 @@ const Documents: React.FC = () => {
           </Typography>
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {results.map((result) => (
-              <Grid xs={12} key={result.id}>
+              <Grid item xs={12} key={result.id}>
                 <Card
                   sx={{
                     cursor: 'pointer',

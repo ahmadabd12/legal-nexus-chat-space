@@ -3,7 +3,7 @@ import React from 'react';
 import {
   Container,
   Typography,
-  Grid2 as Grid,
+  Grid,
   Card,
   CardContent,
   CardActions,
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
 
       {/* Quick Actions */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={handleNewCase}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Add fontSize="large" color="primary" sx={{ mb: 1 }} />
@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Search fontSize="large" color="primary" sx={{ mb: 1 }} />
@@ -94,7 +94,7 @@ const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Folder fontSize="large" color="primary" sx={{ mb: 1 }} />
@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/cases')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Archive fontSize="large" color="primary" sx={{ mb: 1 }} />
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
       </Typography>
       <Grid container spacing={3}>
         {recentCases.map((case_) => (
-          <Grid xs={12} md={6} lg={4} key={case_.id}>
+          <Grid item xs={12} md={6} lg={4} key={case_.id}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
