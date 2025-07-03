@@ -28,7 +28,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,10 +38,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
 
   const menuItems = [
-    { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-    { text: 'Documents', icon: <Description />, path: '/documents' },
-    { text: 'Cases', icon: <Gavel />, path: '/cases' },
-    { text: 'Profile', icon: <Person />, path: '/profile' },
+    { text: 'لوحة التحكم', icon: <Dashboard />, path: '/dashboard' },
+    { text: 'المستندات', icon: <Description />, path: '/documents' },
+    { text: 'القضايا', icon: <Gavel />, path: '/cases' },
+    { text: 'الملف الشخصي', icon: <Person />, path: '/profile' },
   ];
 
   const handleDrawerToggle = () => {
@@ -64,9 +64,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const drawer = (
     <div>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
-          LegalRAG
+      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png" 
+          alt="وزارة التجارة والصناعة قطر" 
+          style={{ width: 40, height: 30 }}
+        />
+        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
+          البحث القانوني
         </Typography>
       </Toolbar>
       <List>
@@ -75,9 +80,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ListItemButton
               selected={location.pathname === item.path}
               onClick={() => navigate(item.path)}
+              sx={{ textAlign: 'right' }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText primary={item.text} sx={{ textAlign: 'right' }} />
+              <ListItemIcon sx={{ minWidth: 'auto', marginLeft: 2 }}>{item.icon}</ListItemIcon>
             </ListItemButton>
           </ListItem>
         ))}
@@ -94,13 +100,20 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ ml: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-            LegalRAG Research Platform
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png" 
+              alt="قطر" 
+              style={{ width: 32, height: 24 }}
+            />
+            <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
+              منصة البحث القانوني - وزارة التجارة والصناعة
+            </Typography>
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography variant="body2">
               {user?.name}
@@ -118,13 +131,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleProfileMenuClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       >
         <MenuItem onClick={() => { navigate('/profile'); handleProfileMenuClose(); }}>
-          Profile
+          الملف الشخصي
         </MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>تسجيل الخروج</MenuItem>
       </Menu>
 
       <Box

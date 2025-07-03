@@ -3,14 +3,13 @@ import React from 'react';
 import {
   Container,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   CardActions,
   Button,
   Box,
   Chip,
-  IconButton,
 } from '@mui/material';
 import { Add, Search, Folder, PlayArrow, Archive } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -26,8 +25,8 @@ const Dashboard: React.FC = () => {
 
   const handleNewCase = async () => {
     const newCase = await createCase(
-      'New Legal Research',
-      'Untitled case - click to add description'
+      'بحث قانوني جديد',
+      'قضية جديدة - انقر لإضافة وصف'
     );
     navigate(`/cases/${newCase.id}`);
   };
@@ -50,60 +49,69 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'active': return 'نشط';
+      case 'completed': return 'مكتمل';
+      case 'archived': return 'مؤرشف';
+      default: return status;
+    }
+  };
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       {/* Welcome Header */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Welcome back, {user?.name?.split(' ')[0]}
+          مرحباً بك، {user?.name?.split(' ')[0]}
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Continue your legal research or start a new case analysis
+          تابع بحثك القانوني أو ابدأ تحليل قضية جديدة
         </Typography>
       </Box>
 
       {/* Quick Actions */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={handleNewCase}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Add fontSize="large" color="primary" sx={{ mb: 1 }} />
-              <Typography variant="h6">New Case</Typography>
+              <Typography variant="h6">قضية جديدة</Typography>
               <Typography variant="body2" color="text.secondary">
-                Start new research
+                ابدأ بحثاً جديداً
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Search fontSize="large" color="primary" sx={{ mb: 1 }} />
-              <Typography variant="h6">Quick Search</Typography>
+              <Typography variant="h6">بحث سريع</Typography>
               <Typography variant="body2" color="text.secondary">
-                Search documents
+                البحث في المستندات
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Folder fontSize="large" color="primary" sx={{ mb: 1 }} />
-              <Typography variant="h6">Browse Library</Typography>
+              <Typography variant="h6">تصفح المكتبة</Typography>
               <Typography variant="body2" color="text.secondary">
-                Explore resources
+                استكشف الموارد
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid xs={12} sm={6} md={3}>
           <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/cases')}>
             <CardContent sx={{ textAlign: 'center', py: 3 }}>
               <Archive fontSize="large" color="primary" sx={{ mb: 1 }} />
-              <Typography variant="h6">All Cases</Typography>
+              <Typography variant="h6">جميع القضايا</Typography>
               <Typography variant="body2" color="text.secondary">
-                View case history
+                عرض تاريخ القضايا
               </Typography>
             </CardContent>
           </Card>
@@ -112,11 +120,11 @@ const Dashboard: React.FC = () => {
 
       {/* Recent Cases */}
       <Typography variant="h5" component="h2" gutterBottom>
-        Recent Cases
+        القضايا الأخيرة
       </Typography>
       <Grid container spacing={3}>
         {recentCases.map((case_) => (
-          <Grid item xs={12} md={6} lg={4} key={case_.id}>
+          <Grid xs={12} md={6} lg={4} key={case_.id}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -125,7 +133,7 @@ const Dashboard: React.FC = () => {
                   </Typography>
                   <Chip
                     icon={getStatusIcon(case_.status)}
-                    label={case_.status}
+                    label={getStatusText(case_.status)}
                     color={getStatusColor(case_.status) as any}
                     size="small"
                   />
@@ -134,7 +142,7 @@ const Dashboard: React.FC = () => {
                   {case_.description}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Updated: {case_.updatedAt.toLocaleDateString()}
+                  آخر تحديث: {case_.updatedAt.toLocaleDateString('ar-QA')}
                 </Typography>
                 <Box sx={{ mt: 2 }}>
                   {case_.tags.slice(0, 3).map((tag) => (
@@ -143,7 +151,7 @@ const Dashboard: React.FC = () => {
                       label={tag}
                       size="small"
                       variant="outlined"
-                      sx={{ mr: 0.5, mb: 0.5 }}
+                      sx={{ ml: 0.5, mb: 0.5 }}
                     />
                   ))}
                 </Box>
@@ -154,7 +162,7 @@ const Dashboard: React.FC = () => {
                   onClick={() => navigate(`/cases/${case_.id}`)}
                   startIcon={<PlayArrow />}
                 >
-                  Open Case
+                  فتح القضية
                 </Button>
               </CardActions>
             </Card>
@@ -166,13 +174,13 @@ const Dashboard: React.FC = () => {
         <Card sx={{ textAlign: 'center', py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
-              No cases yet
+              لا توجد قضايا بعد
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
-              Create your first case to get started with legal research
+              أنشئ قضيتك الأولى للبدء في البحث القانوني
             </Typography>
             <Button variant="contained" onClick={handleNewCase} startIcon={<Add />}>
-              Create New Case
+              إنشاء قضية جديدة
             </Button>
           </CardContent>
         </Card>

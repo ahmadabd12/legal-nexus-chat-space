@@ -11,14 +11,16 @@ import Cases from './pages/Cases';
 import CaseWorkspace from './pages/CaseWorkspace';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
+import Index from './pages/Index';
 import { useAuth } from './hooks/useAuth';
 
 const theme = createTheme({
+  direction: 'rtl',
   palette: {
     primary: {
-      main: '#1565c0',
-      dark: '#0d47a1',
-      light: '#42a5f5',
+      main: '#cf2e2e',
+      dark: '#b02525',
+      light: '#da5555',
     },
     secondary: {
       main: '#37474f',
@@ -31,6 +33,7 @@ const theme = createTheme({
     },
   },
   typography: {
+    fontFamily: "'Cairo', sans-serif",
     h4: {
       fontWeight: 600,
     },
@@ -42,7 +45,7 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1565c0',
+          backgroundColor: '#cf2e2e',
         },
       },
     },
@@ -51,6 +54,13 @@ const theme = createTheme({
         root: {
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           transition: 'box-shadow 0.3s ease',
+        },
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          direction: 'rtl',
         },
       },
     },
@@ -73,6 +83,7 @@ const App = () => {
         <CaseProvider>
           <BrowserRouter>
             <Routes>
+              <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route
                 path="/*"
@@ -80,7 +91,6 @@ const App = () => {
                   <ProtectedRoute>
                     <Layout>
                       <Routes>
-                        <Route path="/" element={<Dashboard />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/documents" element={<Documents />} />
                         <Route path="/cases" element={<Cases />} />

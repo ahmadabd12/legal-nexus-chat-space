@@ -32,7 +32,7 @@ const Login: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials. Please try again.');
+      setError('بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ const Login: React.FC = () => {
       await loginWithAzure();
       navigate('/dashboard');
     } catch (err) {
-      setError('Azure AD login failed. Please try again.');
+      setError('فشل تسجيل الدخول بـ Azure AD. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(false);
     }
@@ -64,11 +64,19 @@ const Login: React.FC = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png" 
+              alt="قطر" 
+              style={{ width: 60, height: 45, marginBottom: 16 }}
+            />
             <Typography component="h1" variant="h4" color="primary" fontWeight="bold">
-              LegalRAG
+              منصة البحث القانوني
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
-              Sign in to your account
+              وزارة التجارة والصناعة - دولة قطر
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              سجل دخولك إلى حسابك
             </Typography>
           </Box>
 
@@ -86,10 +94,10 @@ const Login: React.FC = () => {
             disabled={loading}
             sx={{ mb: 2, py: 1.5 }}
           >
-            {loading ? <CircularProgress size={20} /> : 'Sign in with Microsoft'}
+            {loading ? <CircularProgress size={20} /> : 'تسجيل الدخول بـ Microsoft'}
           </Button>
 
-          <Divider sx={{ my: 2 }}>OR</Divider>
+          <Divider sx={{ my: 2 }}>أو</Divider>
 
           <Box component="form" onSubmit={handleSubmit}>
             <TextField
@@ -97,7 +105,7 @@ const Login: React.FC = () => {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="البريد الإلكتروني"
               name="email"
               autoComplete="email"
               autoFocus
@@ -109,7 +117,7 @@ const Login: React.FC = () => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="كلمة المرور"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -123,7 +131,7 @@ const Login: React.FC = () => {
               sx={{ mt: 3, mb: 2, py: 1.5 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={20} /> : 'Sign In'}
+              {loading ? <CircularProgress size={20} /> : 'تسجيل الدخول'}
             </Button>
           </Box>
         </Paper>

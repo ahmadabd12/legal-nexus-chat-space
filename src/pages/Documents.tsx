@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Chip,
-  Grid,
+  Grid2 as Grid,
   ToggleButton,
   ToggleButtonGroup,
   CircularProgress,
@@ -53,7 +53,7 @@ const Documents: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Document Library
+        مكتبة المستندات
       </Typography>
       
       {/* Search Section */}
@@ -62,7 +62,7 @@ const Documents: React.FC = () => {
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Search legal documents..."
+            placeholder="البحث في المستندات القانونية..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -75,10 +75,10 @@ const Documents: React.FC = () => {
             size="small"
           >
             <ToggleButton value="semantic">
-              Semantic
+              دلالي
             </ToggleButton>
             <ToggleButton value="vector">
-              Vector
+              متجه
             </ToggleButton>
           </ToggleButtonGroup>
           <Button
@@ -87,7 +87,7 @@ const Documents: React.FC = () => {
             onClick={handleSearch}
             disabled={!query.trim() || loading}
           >
-            {loading ? <CircularProgress size={20} /> : 'Search'}
+            {loading ? <CircularProgress size={20} /> : 'بحث'}
           </Button>
         </Box>
 
@@ -95,31 +95,31 @@ const Documents: React.FC = () => {
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FilterList fontSize="small" color="action" />
           <FormControl size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>Law Area</InputLabel>
+            <InputLabel>مجال القانون</InputLabel>
             <Select
               value={lawFilter}
-              label="Law Area"
+              label="مجال القانون"
               onChange={(e) => setLawFilter(e.target.value)}
             >
-              <MenuItem value="all">All Areas</MenuItem>
-              <MenuItem value="contract">Contract Law</MenuItem>
-              <MenuItem value="employment">Employment</MenuItem>
-              <MenuItem value="corporate">Corporate</MenuItem>
-              <MenuItem value="criminal">Criminal</MenuItem>
+              <MenuItem value="all">جميع المجالات</MenuItem>
+              <MenuItem value="contract">قانون العقود</MenuItem>
+              <MenuItem value="employment">العمل</MenuItem>
+              <MenuItem value="corporate">الشركات</MenuItem>
+              <MenuItem value="criminal">الجنائي</MenuItem>
             </Select>
           </FormControl>
           <FormControl size="small" sx={{ minWidth: 100 }}>
-            <InputLabel>Year</InputLabel>
+            <InputLabel>السنة</InputLabel>
             <Select
               value={yearFilter}
-              label="Year"
+              label="السنة"
               onChange={(e) => setYearFilter(e.target.value)}
             >
-              <MenuItem value="all">All Years</MenuItem>
+              <MenuItem value="all">جميع السنوات</MenuItem>
               <MenuItem value="2024">2024</MenuItem>
               <MenuItem value="2023">2023</MenuItem>
               <MenuItem value="2022">2022</MenuItem>
-              <MenuItem value="older">Older</MenuItem>
+              <MenuItem value="older">أقدم</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -135,11 +135,11 @@ const Documents: React.FC = () => {
       {results.length > 0 && (
         <>
           <Typography variant="h6" gutterBottom>
-            Search Results ({results.length})
+            نتائج البحث ({results.length})
           </Typography>
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {results.map((result) => (
-              <Grid item xs={12} key={result.id}>
+              <Grid xs={12} key={result.id}>
                 <Card
                   sx={{
                     cursor: 'pointer',
@@ -160,13 +160,13 @@ const Documents: React.FC = () => {
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
                           <Typography variant="caption" color="text.secondary">
-                            Source: {result.source}
+                            المصدر: {result.source}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            Updated: {result.lastUpdated.toLocaleDateString()}
+                            التحديث: {result.lastUpdated.toLocaleDateString('ar-QA')}
                           </Typography>
                           <Chip
-                            label={`${(result.relevanceScore * 100).toFixed(0)}% match`}
+                            label={`${(result.relevanceScore * 100).toFixed(0)}% تطابق`}
                             size="small"
                             color="primary"
                             variant="outlined"
@@ -179,7 +179,7 @@ const Documents: React.FC = () => {
                               label={tag}
                               size="small"
                               variant="outlined"
-                              sx={{ mr: 0.5 }}
+                              sx={{ ml: 0.5 }}
                             />
                           ))}
                         </Box>
@@ -203,10 +203,10 @@ const Documents: React.FC = () => {
         <Card sx={{ textAlign: 'center', py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
-              No documents found
+              لم يتم العثور على مستندات
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Try adjusting your search terms or filters
+              حاول تعديل مصطلحات البحث أو المرشحات
             </Typography>
           </CardContent>
         </Card>

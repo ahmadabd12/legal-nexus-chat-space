@@ -11,7 +11,6 @@ import {
   Avatar,
   Switch,
   FormControlLabel,
-  Divider,
   Alert,
 } from '@mui/material';
 import { Edit, Save, Person } from '@mui/icons-material';
@@ -46,12 +45,12 @@ const Profile: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Profile & Settings
+        الملف الشخصي والإعدادات
       </Typography>
 
       {saveSuccess && (
         <Alert severity="success" sx={{ mb: 3 }}>
-          Profile updated successfully!
+          تم تحديث الملف الشخصي بنجاح!
         </Alert>
       )}
 
@@ -59,7 +58,7 @@ const Profile: React.FC = () => {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-            <Avatar sx={{ width: 80, height: 80, mr: 3, bgcolor: 'primary.main' }}>
+            <Avatar sx={{ width: 80, height: 80, ml: 3, bgcolor: 'primary.main' }}>
               <Person sx={{ fontSize: 40 }} />
             </Avatar>
             <Box>
@@ -77,34 +76,34 @@ const Profile: React.FC = () => {
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant="h6">
-              Personal Information
+              المعلومات الشخصية
             </Typography>
             <Button
               startIcon={editing ? <Save /> : <Edit />}
               onClick={editing ? handleSave : () => setEditing(true)}
               variant={editing ? 'contained' : 'outlined'}
             >
-              {editing ? 'Save' : 'Edit'}
+              {editing ? 'حفظ' : 'تعديل'}
             </Button>
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
-              label="Full Name"
+              label="الاسم الكامل"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               disabled={!editing}
               fullWidth
             />
             <TextField
-              label="Email Address"
+              label="البريد الإلكتروني"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               disabled={!editing}
               fullWidth
             />
             <TextField
-              label="Organization"
+              label="المؤسسة"
               value={formData.organization}
               onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
               disabled={!editing}
@@ -118,7 +117,7 @@ const Profile: React.FC = () => {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Application Settings
+            إعدادات التطبيق
           </Typography>
           
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -129,7 +128,7 @@ const Profile: React.FC = () => {
                   onChange={(e) => setSettings({ ...settings, darkMode: e.target.checked })}
                 />
               }
-              label="Dark Mode"
+              label="الوضع المظلم"
             />
             <FormControlLabel
               control={
@@ -138,7 +137,7 @@ const Profile: React.FC = () => {
                   onChange={(e) => setSettings({ ...settings, notifications: e.target.checked })}
                 />
               }
-              label="Email Notifications"
+              label="إشعارات البريد الإلكتروني"
             />
             <FormControlLabel
               control={
@@ -147,7 +146,7 @@ const Profile: React.FC = () => {
                   onChange={(e) => setSettings({ ...settings, autoSave: e.target.checked })}
                 />
               }
-              label="Auto-save Cases"
+              label="حفظ القضايا تلقائياً"
             />
           </Box>
         </CardContent>
@@ -157,18 +156,18 @@ const Profile: React.FC = () => {
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Account Actions
+            إجراءات الحساب
           </Typography>
           
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <Button variant="outlined" color="error" onClick={handleLogout}>
-              Sign Out
+              تسجيل الخروج
             </Button>
             <Button variant="outlined" color="warning">
-              Change Password
+              تغيير كلمة المرور
             </Button>
             <Button variant="outlined" color="error">
-              Delete Account
+              حذف الحساب
             </Button>
           </Box>
         </CardContent>
