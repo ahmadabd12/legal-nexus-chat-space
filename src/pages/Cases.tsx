@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -19,68 +18,93 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@mui/material';
-import { Add, PlayArrow, Archive, FilterList } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { useCase } from '../contexts/CaseContext';
+} from "@mui/material";
+import Zoom from "@mui/material/Zoom";
+import { Add, PlayArrow, Archive, FilterList } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useCase } from "../contexts/CaseContext";
 
 const Cases: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [newCaseTitle, setNewCaseTitle] = useState('');
-  const [newCaseDescription, setNewCaseDescription] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [newCaseTitle, setNewCaseTitle] = useState("");
+  const [newCaseDescription, setNewCaseDescription] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
   const { cases, createCase } = useCase();
 
-  const filteredCases = cases.filter(case_ =>
-    statusFilter === 'all' || case_.status === statusFilter
+  const filteredCases = cases.filter(
+    (case_) => statusFilter === "all" || case_.status === statusFilter
   );
 
   const handleCreateCase = async () => {
     if (newCaseTitle.trim()) {
       const newCase = await createCase(newCaseTitle, newCaseDescription);
       setOpenDialog(false);
-      setNewCaseTitle('');
-      setNewCaseDescription('');
+      setNewCaseTitle("");
+      setNewCaseDescription("");
       navigate(`/cases/${newCase.id}`);
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'success';
-      case 'completed': return 'primary';
-      case 'archived': return 'default';
-      default: return 'default';
+      case "active":
+        return "success";
+      case "completed":
+        return "primary";
+      case "archived":
+        return "default";
+      default:
+        return "default";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <PlayArrow fontSize="small" />;
-      case 'completed': return <Archive fontSize="small" />;
-      case 'archived': return <Archive fontSize="small" />;
-      default: return null;
+      case "active":
+        return (
+          <PlayArrow fontSize="small" sx={{ transform: "rotate(180deg)" }} />
+        );
+      case "completed":
+        return <Archive fontSize="small" />;
+      case "archived":
+        return <Archive fontSize="small" />;
+      default:
+        return null;
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'نشط';
-      case 'completed': return 'مكتمل';
-      case 'archived': return 'مؤرشف';
-      default: return status;
+      case "active":
+        return "نشط";
+      case "completed":
+        return "مكتمل";
+      case "archived":
+        return "مؤرشف";
+      default:
+        return status;
     }
   };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        dir="rtl"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+          textAlign: "right",
+        }}
+      >
         <Typography variant="h4" component="h1">
           القضايا القانونية
         </Typography>
         <Button
           variant="contained"
+          sx={{ flexDirection: "row-reverse" }}
           startIcon={<Add />}
           onClick={() => setOpenDialog(true)}
         >
@@ -90,7 +114,14 @@ const Cases: React.FC = () => {
 
       {/* Filters */}
       <Card sx={{ p: 2, mb: 3 }}>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+            flexDirection: "",
+          }}
+        >
           <FilterList fontSize="small" color="action" />
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel>الحالة</InputLabel>
@@ -106,7 +137,7 @@ const Cases: React.FC = () => {
             </Select>
           </FormControl>
           <Typography variant="body2" color="text.secondary">
-            {filteredCases.length} قضية
+            {filteredCases.length} قضايا
           </Typography>
         </Box>
       </Card>
@@ -115,9 +146,16 @@ const Cases: React.FC = () => {
       <Grid container spacing={3}>
         {filteredCases.map((case_) => (
           <Grid item xs={12} md={6} lg={4} key={case_.id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                minWidth: "250px",
+              }}
+            >
               <CardContent sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Typography variant="h6" component="h3" sx={{ flexGrow: 1 }}>
                     {case_.title}
                   </Typography>
@@ -126,21 +164,34 @@ const Cases: React.FC = () => {
                     label={getStatusText(case_.status)}
                     color={getStatusColor(case_.status) as any}
                     size="small"
+                    sx={{ flexDirection: "row-reverse" }}
                   />
                 </Box>
-                
+
                 <Typography variant="body2" color="text.secondary" paragraph>
                   {case_.description}
                 </Typography>
-                
+
                 <Box sx={{ mb: 2 }}>
-                  <Typography variant="caption" color="text.secondary" display="block">
-                    الإنشاء: {case_.createdAt.toLocaleDateString('ar-QA')}
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    display="block"
+                  >
+                    الإنشاء: {case_.createdAt.toLocaleDateString("ar-QA")}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" display="block">
-                    التحديث: {case_.updatedAt.toLocaleDateString('ar-QA')}
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    display="block"
+                  >
+                    التحديث: {case_.updatedAt.toLocaleDateString("ar-QA")}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" display="block">
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    display="block"
+                  >
                     الرسائل: {case_.messages.length}
                   </Typography>
                 </Box>
@@ -152,7 +203,7 @@ const Cases: React.FC = () => {
                       label={tag}
                       size="small"
                       variant="outlined"
-                      sx={{ ml: 0.5, mb: 0.5 }}
+                      sx={{ mr: 0.5, mb: 0.5 }}
                     />
                   ))}
                   {case_.tags.length > 3 && (
@@ -160,17 +211,20 @@ const Cases: React.FC = () => {
                       label={`+${case_.tags.length - 3} المزيد`}
                       size="small"
                       variant="outlined"
-                      sx={{ ml: 0.5, mb: 0.5 }}
+                      sx={{ mr: 0.5, mb: 0.5 }}
                     />
                   )}
                 </Box>
               </CardContent>
-              
-              <CardActions>
+
+              <CardActions
+                sx={{ direction: "rtl", justifyContent: "flex-start" }}
+              >
                 <Button
                   size="small"
                   onClick={() => navigate(`/cases/${case_.id}`)}
-                  startIcon={<PlayArrow />}
+                  startIcon={<PlayArrow sx={{ transform: "rotate(180deg)" }} />}
+                  sx={{ flexDirection: "row-reverse" }}
                 >
                   فتح القضية
                 </Button>
@@ -181,10 +235,12 @@ const Cases: React.FC = () => {
       </Grid>
 
       {filteredCases.length === 0 && (
-        <Card sx={{ textAlign: 'center', py: 4 }}>
+        <Card sx={{ textAlign: "center", py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
-              {statusFilter === 'all' ? 'لا توجد قضايا بعد' : `لا توجد قضايا ${getStatusText(statusFilter)}`}
+              {statusFilter === "all"
+                ? "لا توجد قضايا بعد"
+                : `لا توجد قضايا ${getStatusText(statusFilter)}`}
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
               أنشئ قضيتك الأولى للبدء في البحث القانوني
@@ -201,7 +257,13 @@ const Cases: React.FC = () => {
       )}
 
       {/* New Case Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+        slots={{ transition: Zoom }}
+      >
         <DialogTitle>إنشاء قضية جديدة</DialogTitle>
         <DialogContent>
           <TextField

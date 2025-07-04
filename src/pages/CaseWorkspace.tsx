@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Drawer,
@@ -18,7 +17,7 @@ import {
   CardContent,
   CircularProgress,
   Divider,
-} from '@mui/material';
+} from "@mui/material";
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,11 +28,13 @@ import {
   Psychology,
   Summarize,
   Article,
-} from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
-import { useCase } from '../contexts/CaseContext';
-import { useChat } from '../hooks/useChat';
-import { useGraph } from '../hooks/useGraph';
+} from "@mui/icons-material";
+import { useMediaQuery, useTheme } from "@mui/material";
+
+import { useParams } from "react-router-dom";
+import { useCase } from "../contexts/CaseContext";
+import { useChat } from "../hooks/useChat";
+import { useGraph } from "../hooks/useGraph";
 
 const drawerWidth = 400;
 
@@ -41,12 +42,14 @@ const CaseWorkspace: React.FC = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [drawerTab, setDrawerTab] = useState(0);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [showContext, setShowContext] = useState(false);
-  
+
   const { loadCase, currentCase } = useCase();
   const { messages, send, loading: chatLoading } = useChat();
   const { loadGraph, graphData, loading: graphLoading } = useGraph();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     if (caseId) {
@@ -57,17 +60,17 @@ const CaseWorkspace: React.FC = () => {
   const handleSendMessage = async () => {
     if (message.trim()) {
       await send(message);
-      setMessage('');
+      setMessage("");
     }
   };
 
   const handleQuickAction = async (action: string) => {
     const quickMessages = {
-      summarize: 'Please summarize the key points from the current section.',
-      suggest: 'What related articles or cases should I review?',
-      reasoning: 'Can you show me the reasoning chain for your last response?',
+      summarize: "Please summarize the key points from the current section.",
+      suggest: "What related articles or cases should I review?",
+      reasoning: "Can you show me the reasoning chain for your last response?",
     };
-    
+
     if (quickMessages[action as keyof typeof quickMessages]) {
       await send(quickMessages[action as keyof typeof quickMessages]);
     }
@@ -77,9 +80,9 @@ const CaseWorkspace: React.FC = () => {
     switch (drawerTab) {
       case 0: // Documents
         return (
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2 }} dir="rtl">
             <Typography variant="h6" gutterBottom>
-              Case Documents
+              مستندات القضية
             </Typography>
             <List>
               {currentCase?.documents.map((doc, index) => (
@@ -88,26 +91,27 @@ const CaseWorkspace: React.FC = () => {
                   <ListItemText
                     primary={doc}
                     secondary="Click to view with highlights"
+                    //secondary="انقر لعرض المحتوى مع التمييزات"
                   />
                 </ListItem>
               ))}
             </List>
             {currentCase?.documents.length === 0 && (
               <Typography variant="body2" color="text.secondary">
-                No documents attached to this case yet.
+                لم يتم إرفاق أي مستندات بهذه القضية بعد.
               </Typography>
             )}
           </Box>
         );
-      
+
       case 1: // Graph
         return (
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2 }} dir="ltr">
             <Typography variant="h6" gutterBottom>
               Knowledge Graph
             </Typography>
             {graphLoading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
                 <CircularProgress />
               </Box>
             ) : graphData ? (
@@ -122,7 +126,7 @@ const CaseWorkspace: React.FC = () => {
                     variant="outlined"
                     size="small"
                     sx={{ m: 0.25 }}
-                    color={node.type === 'statute' ? 'primary' : 'default'}
+                    color={node.type === "statute" ? "primary" : "default"}
                   />
                 ))}
                 <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
@@ -136,13 +140,14 @@ const CaseWorkspace: React.FC = () => {
               </Box>
             ) : (
               <Typography variant="body2" color="text.secondary">
-                No graph data available. Start a conversation to generate insights.
+                No graph data available. Start a conversation to generate
+                insights.
               </Typography>
             )}
             <Button
               variant="outlined"
               startIcon={<AccountTree />}
-              onClick={() => loadGraph('sample')}
+              onClick={() => loadGraph("sample")}
               sx={{ mt: 2 }}
               disabled={graphLoading}
             >
@@ -150,7 +155,7 @@ const CaseWorkspace: React.FC = () => {
             </Button>
           </Box>
         );
-      
+
       default:
         return null;
     }
@@ -162,16 +167,14 @@ const CaseWorkspace: React.FC = () => {
         key={msg.id}
         sx={{
           mb: 2,
-          alignSelf: msg.type === 'user' ? 'flex-end' : 'flex-start',
-          maxWidth: '80%',
-          bgcolor: msg.type === 'user' ? 'primary.main' : 'background.paper',
-          color: msg.type === 'user' ? 'primary.contrastText' : 'text.primary',
+          alignSelf: msg.type === "user" ? "flex-end" : "flex-start",
+          maxWidth: "80%",
+          bgcolor: msg.type === "user" ? "primary.main" : "background.paper",
+          color: msg.type === "user" ? "primary.contrastText" : "text.primary",
         }}
       >
-        <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
-          <Typography variant="body2">
-            {msg.content}
-          </Typography>
+        <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
+          <Typography variant="body2">{msg.content}</Typography>
           {msg.metadata && (
             <Box sx={{ mt: 1 }}>
               {msg.metadata.sources && (
@@ -185,7 +188,7 @@ const CaseWorkspace: React.FC = () => {
                       label={source}
                       size="small"
                       variant="outlined"
-                      sx={{ mr: 0.5, mb: 0.5, fontSize: '0.7rem' }}
+                      sx={{ mr: 0.5, mb: 0.5, fontSize: "0.7rem" }}
                     />
                   ))}
                 </Box>
@@ -202,7 +205,7 @@ const CaseWorkspace: React.FC = () => {
                       size="small"
                       color="secondary"
                       variant="outlined"
-                      sx={{ mr: 0.5, mb: 0.5, fontSize: '0.7rem' }}
+                      sx={{ mr: 0.5, mb: 0.5, fontSize: "0.7rem" }}
                     />
                   ))}
                 </Box>
@@ -219,14 +222,21 @@ const CaseWorkspace: React.FC = () => {
 
   if (!currentCase) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
+    <Box sx={{ display: "flex", height: "calc(100vh - 64px)" }} dir="rtl">
       {/* Collapsible Drawer */}
       <Drawer
         variant="persistent"
@@ -234,24 +244,24 @@ const CaseWorkspace: React.FC = () => {
         sx={{
           width: drawerOpen ? drawerWidth : 0,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            position: 'relative',
-            height: '100%',
+            position: "relative",
+            height: "100%",
           },
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', p: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", p: 1 }}>
           <Tabs
             value={drawerTab}
             onChange={(_, newValue) => setDrawerTab(newValue)}
             sx={{ flexGrow: 1 }}
           >
-            <Tab icon={<Description />} label="Docs" />
+            <Tab icon={<Description />} label="المستندات" />
             <Tab icon={<AccountTree />} label="Graph" />
           </Tabs>
           <IconButton onClick={() => setDrawerOpen(false)}>
-            <ChevronLeft />
+            <ChevronRight />
           </IconButton>
         </Box>
         <Divider />
@@ -259,71 +269,111 @@ const CaseWorkspace: React.FC = () => {
       </Drawer>
 
       {/* Main Chat Area */}
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          filter: isMobile && drawerOpen ? "blur(1px)" : "none",
+          opacity: isMobile && drawerOpen ? 0.5 : 1,
+          pointerEvents: isMobile && drawerOpen ? "none" : "auto",
+          transition: "all 0.3s ease",
+        }}
+        dir="ltr"
+      >
         {/* Header */}
-        <Paper sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Paper sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
+          {/* {!drawerOpen && (
+            <IconButton onClick={() => setDrawerOpen(true)}>
+              <ChevronLeft />
+            </IconButton>
+          )} */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              textAlign: "right",
+            }}
+            dir="rtl"
+          >
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              القضية: {currentCase.title}
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<Visibility />}
+              onClick={() => setShowContext(!showContext)}
+              sx={{ flexDirection: "row-reverse", height: "fit-content" }}
+            >
+              السياق
+            </Button>
+          </Box>
           {!drawerOpen && (
             <IconButton onClick={() => setDrawerOpen(true)}>
-              <ChevronRight />
+              <ChevronLeft />
             </IconButton>
           )}
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Case: {currentCase.title}
-          </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<Visibility />}
-            onClick={() => setShowContext(!showContext)}
-          >
-            Context
-          </Button>
         </Paper>
 
         {/* Messages */}
-        <Box sx={{ flexGrow: 1, p: 2, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            p: 2,
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {messages.map(renderMessage)}
           {chatLoading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
               <CircularProgress size={24} />
             </Box>
           )}
         </Box>
 
         {/* Quick Actions */}
-        <Paper sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-          <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+        <Paper sx={{ p: 2, borderTop: 1, borderColor: "divider" }} dir="rtl">
+          <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
             <Button
               size="small"
               startIcon={<Summarize />}
-              onClick={() => handleQuickAction('summarize')}
+              onClick={() => handleQuickAction("summarize")}
+              sx={{ flexDirection: "row-reverse" }}
             >
-              Summarize
+              لخّص
             </Button>
             <Button
               size="small"
               startIcon={<Article />}
-              onClick={() => handleQuickAction('suggest')}
+              onClick={() => handleQuickAction("suggest")}
+              sx={{ flexDirection: "row-reverse" }}
             >
-              Suggest Articles
+              اقترح مقالات
             </Button>
             <Button
               size="small"
               startIcon={<Psychology />}
-              onClick={() => handleQuickAction('reasoning')}
+              onClick={() => handleQuickAction("reasoning")}
+              sx={{ flexDirection: "row-reverse" }}
             >
-              Show Reasoning
+              اعرض المنطق
             </Button>
           </Box>
 
           {/* Input Area */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Ask a legal question..."
+              placeholder="اطرح سؤالًا قانونيًا..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
+              onKeyPress={(e) =>
+                e.key === "Enter" && !e.shiftKey && handleSendMessage()
+              }
               multiline
               maxRows={3}
             />
@@ -333,19 +383,28 @@ const CaseWorkspace: React.FC = () => {
               disabled={!message.trim() || chatLoading}
               sx={{ minWidth: 64 }}
             >
-              <Send />
+              <Send sx={{ transform: "rotate(180deg)" }} />
             </Button>
           </Box>
         </Paper>
 
         {/* Context Panel */}
         {showContext && (
-          <Paper sx={{ p: 2, maxHeight: 200, overflow: 'auto', borderTop: 1, borderColor: 'divider' }}>
+          <Paper
+            sx={{
+              p: 2,
+              maxHeight: 200,
+              overflow: "auto",
+              borderTop: 1,
+              borderColor: "divider",
+            }}
+          >
             <Typography variant="subtitle2" gutterBottom>
               Raw Context & Insights
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              This panel would show retrieved law excerpts and graph insights in a real implementation.
+              This panel would show retrieved law excerpts and graph insights in
+              a real implementation.
             </Typography>
           </Paper>
         )}

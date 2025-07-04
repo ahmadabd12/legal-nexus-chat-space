@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,7 +15,7 @@ import {
   Menu,
   MenuItem,
   IconButton,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Dashboard,
   Description,
@@ -24,9 +23,9 @@ import {
   Person,
   Menu as MenuIcon,
   AccountCircle,
-} from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const drawerWidth = 280;
 
@@ -38,10 +37,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
 
   const menuItems = [
-    { text: 'لوحة التحكم', icon: <Dashboard />, path: '/dashboard' },
-    { text: 'المستندات', icon: <Description />, path: '/documents' },
-    { text: 'القضايا', icon: <Gavel />, path: '/cases' },
-    { text: 'الملف الشخصي', icon: <Person />, path: '/profile' },
+    { text: "لوحة التحكم", icon: <Dashboard />, path: "/dashboard" },
+    { text: "المستندات", icon: <Description />, path: "/documents" },
+    { text: "القضايا", icon: <Gavel />, path: "/cases" },
+    { text: "الملف الشخصي", icon: <Person />, path: "/profile" },
   ];
 
   const handleDrawerToggle = () => {
@@ -59,18 +58,23 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const handleLogout = async () => {
     await logout();
     handleProfileMenuClose();
-    navigate('/login');
+    navigate("/login");
   };
 
   const drawer = (
     <div>
-      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png" 
-          alt="وزارة التجارة والصناعة قطر" 
+      <Toolbar sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png"
+          alt="وزارة التجارة والصناعة قطر"
           style={{ width: 40, height: 30 }}
         />
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ fontWeight: "bold", fontSize: "1rem" }}
+        >
           البحث القانوني
         </Typography>
       </Toolbar>
@@ -80,10 +84,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ListItemButton
               selected={location.pathname === item.path}
               onClick={() => navigate(item.path)}
-              sx={{ textAlign: 'right' }}
+              sx={{ textAlign: "right" }}
             >
-              <ListItemText primary={item.text} sx={{ textAlign: 'right' }} />
-              <ListItemIcon sx={{ minWidth: 'auto', marginLeft: 2 }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} sx={{ textAlign: "right" }} />
+              <ListItemIcon sx={{ minWidth: "auto", marginLeft: 2 }}>
+                {item.icon}
+              </ListItemIcon>
             </ListItemButton>
           </ListItem>
         ))}
@@ -92,32 +98,41 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Box sx={{ display: "flex" }} dir="rtl">
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ ml: 2, display: { sm: 'none' } }}
+            sx={{ ml: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png" 
-              alt="قطر" 
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 2, flexGrow: 1 }}
+          >
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Qatar.svg/320px-Flag_of_Qatar.svg.png"
+              // src="https://www.moci.gov.qa/wp-content/themes/2018_mec_v1/assets/images/logo-main.svg"
+              alt="قطر"
               style={{ width: 32, height: 24 }}
             />
-            <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ fontWeight: "bold" }}
+            >
               منصة البحث القانوني - وزارة التجارة والصناعة
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="body2">
-              {user?.name}
-            </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Typography variant="body2">{user?.name}</Typography>
             <IconButton onClick={handleProfileMenuOpen} color="inherit">
               <Avatar sx={{ width: 32, height: 32 }}>
                 {user?.name?.charAt(0)}
@@ -131,10 +146,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleProfileMenuClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
-        <MenuItem onClick={() => { navigate('/profile'); handleProfileMenuClose(); }}>
+        <MenuItem
+          onClick={() => {
+            navigate("/profile");
+            handleProfileMenuClose();
+          }}
+        >
           الملف الشخصي
         </MenuItem>
         <MenuItem onClick={handleLogout}>تسجيل الخروج</MenuItem>
@@ -142,25 +162,35 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       <Box
         component="nav"
+        dir="rtl"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
       >
         <Drawer
           variant="temporary"
           open={mobileOpen}
+          dir="rtl"
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
+          anchor="right"
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
         </Drawer>
         <Drawer
+          anchor="right"
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -173,8 +203,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         sx={{
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          minHeight: '100vh',
-          bgcolor: 'background.default',
+          minHeight: "100vh",
+          bgcolor: "background.default",
         }}
       >
         <Toolbar />

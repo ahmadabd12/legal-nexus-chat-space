@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -12,17 +11,17 @@ import {
   Switch,
   FormControlLabel,
   Alert,
-} from '@mui/material';
-import { Edit, Save, Person } from '@mui/icons-material';
-import { useAuth } from '../hooks/useAuth';
+} from "@mui/material";
+import { Edit, Save, Person } from "@mui/icons-material";
+import { useAuth } from "../hooks/useAuth";
 
 const Profile: React.FC = () => {
   const { user, logout } = useAuth();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    organization: user?.organization || '',
+    name: user?.name || "",
+    email: user?.email || "",
+    organization: user?.organization || "",
   });
   const [settings, setSettings] = useState({
     darkMode: false,
@@ -57,8 +56,10 @@ const Profile: React.FC = () => {
       {/* Profile Information */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-            <Avatar sx={{ width: 80, height: 80, ml: 3, bgcolor: 'primary.main' }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Avatar
+              sx={{ width: 80, height: 80, ml: 3, bgcolor: "primary.main" }}
+            >
               <Person sx={{ fontSize: 40 }} />
             </Avatar>
             <Box>
@@ -74,38 +75,52 @@ const Profile: React.FC = () => {
             </Box>
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6">
-              المعلومات الشخصية
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography variant="h6">المعلومات الشخصية</Typography>
             <Button
               startIcon={editing ? <Save /> : <Edit />}
               onClick={editing ? handleSave : () => setEditing(true)}
-              variant={editing ? 'contained' : 'outlined'}
+              variant={editing ? "contained" : "outlined"}
+              sx={{
+                flexDirection: "row-reverse",
+              }}
             >
-              {editing ? 'حفظ' : 'تعديل'}
+              {editing ? "حفظ" : "تعديل"}
             </Button>
           </Box>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField
               label="الاسم الكامل"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               disabled={!editing}
               fullWidth
             />
             <TextField
               label="البريد الإلكتروني"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               disabled={!editing}
               fullWidth
             />
             <TextField
               label="المؤسسة"
               value={formData.organization}
-              onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, organization: e.target.value })
+              }
               disabled={!editing}
               fullWidth
             />
@@ -119,13 +134,15 @@ const Profile: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             إعدادات التطبيق
           </Typography>
-          
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <FormControlLabel
               control={
                 <Switch
                   checked={settings.darkMode}
-                  onChange={(e) => setSettings({ ...settings, darkMode: e.target.checked })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, darkMode: e.target.checked })
+                  }
                 />
               }
               label="الوضع المظلم"
@@ -134,7 +151,12 @@ const Profile: React.FC = () => {
               control={
                 <Switch
                   checked={settings.notifications}
-                  onChange={(e) => setSettings({ ...settings, notifications: e.target.checked })}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      notifications: e.target.checked,
+                    })
+                  }
                 />
               }
               label="إشعارات البريد الإلكتروني"
@@ -143,7 +165,9 @@ const Profile: React.FC = () => {
               control={
                 <Switch
                   checked={settings.autoSave}
-                  onChange={(e) => setSettings({ ...settings, autoSave: e.target.checked })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, autoSave: e.target.checked })
+                  }
                 />
               }
               label="حفظ القضايا تلقائياً"
@@ -158,8 +182,8 @@ const Profile: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             إجراءات الحساب
           </Typography>
-          
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             <Button variant="outlined" color="error" onClick={handleLogout}>
               تسجيل الخروج
             </Button>

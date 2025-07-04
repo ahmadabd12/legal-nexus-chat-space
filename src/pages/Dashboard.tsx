@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -10,51 +9,82 @@ import {
   Button,
   Box,
   Chip,
-} from '@mui/material';
-import { Add, Search, Folder, PlayArrow, Archive } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { useCase } from '../contexts/CaseContext';
-import { useAuth } from '../hooks/useAuth';
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+} from "@mui/material";
+import Zoom from "@mui/material/Zoom";
+import { Add, Search, Folder, PlayArrow, Archive } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useCase } from "../contexts/CaseContext";
+import { useAuth } from "../hooks/useAuth";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { cases, createCase } = useCase();
   const { user } = useAuth();
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newCaseTitle, setNewCaseTitle] = useState("");
+  const [newCaseDescription, setNewCaseDescription] = useState("");
   const recentCases = cases.slice(0, 6);
 
   const handleNewCase = async () => {
     const newCase = await createCase(
-      'بحث قانوني جديد',
-      'قضية جديدة - انقر لإضافة وصف'
+      "بحث قانوني جديد",
+      "قضية جديدة - انقر لإضافة وصف"
     );
     navigate(`/cases/${newCase.id}`);
+  };
+  const handleCreateCase = async () => {
+    if (newCaseTitle.trim()) {
+      const newCase = await createCase(newCaseTitle, newCaseDescription);
+      setOpenDialog(false);
+      setNewCaseTitle("");
+      setNewCaseDescription("");
+      navigate(`/cases/${newCase.id}`);
+    }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'success';
-      case 'completed': return 'primary';
-      case 'archived': return 'default';
-      default: return 'default';
+      case "active":
+        return "success";
+      case "completed":
+        return "primary";
+      case "archived":
+        return "default";
+      default:
+        return "default";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <PlayArrow fontSize="small" />;
-      case 'completed': return <Folder fontSize="small" />;
-      case 'archived': return <Archive fontSize="small" />;
-      default: return null;
+      case "active":
+        return (
+          <PlayArrow fontSize="small" sx={{ transform: "rotate(180deg)" }} />
+        );
+      case "completed":
+        return <Folder fontSize="small" />;
+      case "archived":
+        return <Archive fontSize="small" />;
+      default:
+        return null;
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'نشط';
-      case 'completed': return 'مكتمل';
-      case 'archived': return 'مؤرشف';
-      default: return status;
+      case "active":
+        return "نشط";
+      case "completed":
+        return "مكتمل";
+      case "archived":
+        return "مؤرشف";
+      default:
+        return status;
     }
   };
 
@@ -63,7 +93,7 @@ const Dashboard: React.FC = () => {
       {/* Welcome Header */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          مرحباً بك، {user?.name?.split(' ')[0]}
+          مرحباً بك، {user?.name?.split(" ")[0]}
         </Typography>
         <Typography variant="body1" color="text.secondary">
           تابع بحثك القانوني أو ابدأ تحليل قضية جديدة
@@ -73,8 +103,8 @@ const Dashboard: React.FC = () => {
       {/* Quick Actions */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ cursor: 'pointer' }} onClick={handleNewCase}>
-            <CardContent sx={{ textAlign: 'center', py: 3 }}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => setOpenDialog(true)}>
+            <CardContent sx={{ textAlign: "center", py: 3 }}>
               <Add fontSize="large" color="primary" sx={{ mb: 1 }} />
               <Typography variant="h6">قضية جديدة</Typography>
               <Typography variant="body2" color="text.secondary">
@@ -84,8 +114,11 @@ const Dashboard: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
-            <CardContent sx={{ textAlign: 'center', py: 3 }}>
+          <Card
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/documents")}
+          >
+            <CardContent sx={{ textAlign: "center", py: 3 }}>
               <Search fontSize="large" color="primary" sx={{ mb: 1 }} />
               <Typography variant="h6">بحث سريع</Typography>
               <Typography variant="body2" color="text.secondary">
@@ -95,10 +128,13 @@ const Dashboard: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/documents')}>
-            <CardContent sx={{ textAlign: 'center', py: 3 }}>
+          <Card
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/documents")}
+          >
+            <CardContent sx={{ textAlign: "center", py: 3 }}>
               <Folder fontSize="large" color="primary" sx={{ mb: 1 }} />
-              <Typography variant="h6">تصفح المكتبة</Typography>
+              <Typography variant="h6"> تصفح المستندات</Typography>
               <Typography variant="body2" color="text.secondary">
                 استكشف الموارد
               </Typography>
@@ -106,8 +142,8 @@ const Dashboard: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ cursor: 'pointer' }} onClick={() => navigate('/cases')}>
-            <CardContent sx={{ textAlign: 'center', py: 3 }}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => navigate("/cases")}>
+            <CardContent sx={{ textAlign: "center", py: 3 }}>
               <Archive fontSize="large" color="primary" sx={{ mb: 1 }} />
               <Typography variant="h6">جميع القضايا</Typography>
               <Typography variant="body2" color="text.secondary">
@@ -126,8 +162,16 @@ const Dashboard: React.FC = () => {
         {recentCases.map((case_) => (
           <Grid item xs={12} md={6} lg={4} key={case_.id}>
             <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <CardContent
+                sx={{
+                  minWidth: "250px",
+                  height: "100%",
+                  display: "flex",
+                  minHeight: "180px",
+                  flexDirection: "column",
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Typography variant="h6" component="h3" sx={{ flexGrow: 1 }}>
                     {case_.title}
                   </Typography>
@@ -136,13 +180,14 @@ const Dashboard: React.FC = () => {
                     label={getStatusText(case_.status)}
                     color={getStatusColor(case_.status) as any}
                     size="small"
+                    sx={{ flexDirection: "row-reverse" }}
                   />
                 </Box>
                 <Typography variant="body2" color="text.secondary" paragraph>
                   {case_.description}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  آخر تحديث: {case_.updatedAt.toLocaleDateString('ar-QA')}
+                  آخر تحديث: {case_.updatedAt.toLocaleDateString("ar-QA")}
                 </Typography>
                 <Box sx={{ mt: 2 }}>
                   {case_.tags.slice(0, 3).map((tag) => (
@@ -159,8 +204,11 @@ const Dashboard: React.FC = () => {
               <CardActions>
                 <Button
                   size="small"
+                  sx={{
+                    flexDirection: "row-reverse",
+                  }}
                   onClick={() => navigate(`/cases/${case_.id}`)}
-                  startIcon={<PlayArrow />}
+                  startIcon={<PlayArrow sx={{ transform: "rotate(180deg)" }} />}
                 >
                   فتح القضية
                 </Button>
@@ -171,7 +219,7 @@ const Dashboard: React.FC = () => {
       </Grid>
 
       {recentCases.length === 0 && (
-        <Card sx={{ textAlign: 'center', py: 4 }}>
+        <Card sx={{ textAlign: "center", py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
               لا توجد قضايا بعد
@@ -179,12 +227,58 @@ const Dashboard: React.FC = () => {
             <Typography variant="body2" color="text.secondary" paragraph>
               أنشئ قضيتك الأولى للبدء في البحث القانوني
             </Typography>
-            <Button variant="contained" onClick={handleNewCase} startIcon={<Add />}>
+            <Button
+              variant="contained"
+              onClick={handleNewCase}
+              startIcon={<Add />}
+            >
               إنشاء قضية جديدة
             </Button>
           </CardContent>
         </Card>
       )}
+      {/* New Case Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+        slots={{ transition: Zoom }}
+      >
+        <DialogTitle>إنشاء قضية جديدة</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="عنوان القضية"
+            fullWidth
+            variant="outlined"
+            value={newCaseTitle}
+            onChange={(e) => setNewCaseTitle(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            label="الوصف"
+            fullWidth
+            multiline
+            rows={3}
+            variant="outlined"
+            value={newCaseDescription}
+            onChange={(e) => setNewCaseDescription(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>إلغاء</Button>
+          <Button
+            onClick={handleCreateCase}
+            variant="contained"
+            disabled={!newCaseTitle.trim()}
+          >
+            إنشاء القضية
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

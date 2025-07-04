@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -18,18 +17,23 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@mui/material';
-import { Search, FilterList, Description } from '@mui/icons-material';
-import { useSearch, SearchMode, SearchResult } from '../hooks/useSearch';
+} from "@mui/material";
+import { Search, FilterList, Description } from "@mui/icons-material";
+import { useSearch, SearchMode, SearchResult } from "../hooks/useSearch";
 
 const Documents: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [searchMode, setSearchMode] = useState<SearchMode>('semantic');
-  const [lawFilter, setLawFilter] = useState('all');
-  const [yearFilter, setYearFilter] = useState('all');
+  const [query, setQuery] = useState("");
+  const [searchMode, setSearchMode] = useState<SearchMode>("semantic");
+  const [lawFilter, setLawFilter] = useState("all");
+  const [yearFilter, setYearFilter] = useState("all");
   const [page, setPage] = useState(1);
   const { search, loading, results } = useSearch();
-
+  useEffect(() => {
+    console.log("Results updated:", results.length);
+  }, [results]);
+  useEffect(() => {
+    search("", searchMode); // this will trigger mock search on page load
+  }, []);
   const handleSearch = () => {
     if (query.trim()) {
       search(query, searchMode);
@@ -38,7 +42,7 @@ const Documents: React.FC = () => {
 
   const handleSearchModeChange = (
     _: React.MouseEvent<HTMLElement>,
-    newMode: SearchMode | null,
+    newMode: SearchMode | null
   ) => {
     if (newMode !== null) {
       setSearchMode(newMode);
@@ -46,26 +50,34 @@ const Documents: React.FC = () => {
   };
 
   const handleResultClick = (result: SearchResult) => {
-    console.log('Opening document:', result.id);
+    console.log("Opening document:", result.id);
     // In a real app, this would open the document viewer
   };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        مكتبة المستندات
+        تصفح المستندات
       </Typography>
-      
+
       {/* Search Section */}
       <Card sx={{ p: 3, mb: 3 }}>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            mb: 2,
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <TextField
             fullWidth
             variant="outlined"
             placeholder="البحث في المستندات القانونية..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
             sx={{ minWidth: 200 }}
           />
           <ToggleButtonGroup
@@ -74,25 +86,31 @@ const Documents: React.FC = () => {
             onChange={handleSearchModeChange}
             size="small"
           >
-            <ToggleButton value="semantic">
-              دلالي
-            </ToggleButton>
-            <ToggleButton value="vector">
-              متجه
-            </ToggleButton>
+            <ToggleButton value="semantic">دلالي</ToggleButton>
+            <ToggleButton value="vector">متجه</ToggleButton>
           </ToggleButtonGroup>
           <Button
             variant="contained"
             startIcon={<Search />}
             onClick={handleSearch}
             disabled={!query.trim() || loading}
+            sx={{
+              flexDirection: "row-reverse",
+            }}
           >
-            {loading ? <CircularProgress size={20} /> : 'بحث'}
+            {loading ? <CircularProgress size={20} /> : "بحث"}
           </Button>
         </Box>
 
         {/* Filters */}
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <FilterList fontSize="small" color="action" />
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel>مجال القانون</InputLabel>
@@ -127,7 +145,7 @@ const Documents: React.FC = () => {
 
       {/* Results */}
       {loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
           <CircularProgress />
         </Box>
       )}
@@ -142,31 +160,47 @@ const Documents: React.FC = () => {
               <Grid item xs={12} key={result.id}>
                 <Card
                   sx={{
-                    cursor: 'pointer',
-                    '&:hover': { boxShadow: 4 },
-                    transition: 'box-shadow 0.2s',
+                    cursor: "pointer",
+                    "&:hover": { boxShadow: 4 },
+                    transition: "box-shadow 0.2s",
                   }}
                   onClick={() => handleResultClick(result)}
                 >
                   <CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                    <Box
+                      sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}
+                    >
                       <Description color="primary" sx={{ mt: 0.5 }} />
                       <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="h6" component="h3" gutterBottom>
                           {result.title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" paragraph>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          paragraph
+                        >
                           {result.snippet}
                         </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            mb: 1,
+                          }}
+                        >
                           <Typography variant="caption" color="text.secondary">
                             المصدر: {result.source}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            التحديث: {result.lastUpdated.toLocaleDateString('ar-QA')}
+                            التحديث:{" "}
+                            {result.lastUpdated.toLocaleDateString("ar-QA")}
                           </Typography>
                           <Chip
-                            label={`${(result.relevanceScore * 100).toFixed(0)}% تطابق`}
+                            label={`${(result.relevanceScore * 100).toFixed(
+                              0
+                            )}% تطابق`}
                             size="small"
                             color="primary"
                             variant="outlined"
@@ -191,16 +225,16 @@ const Documents: React.FC = () => {
             ))}
           </Grid>
           <Pagination
-            count={10}
+            count={results.length / 2}
             page={page}
             onChange={(_, newPage) => setPage(newPage)}
-            sx={{ display: 'flex', justifyContent: 'center' }}
+            sx={{ display: "flex", justifyContent: "center" }}
           />
         </>
       )}
 
       {!loading && results.length === 0 && query && (
-        <Card sx={{ textAlign: 'center', py: 4 }}>
+        <Card sx={{ textAlign: "center", py: 4 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary">
               لم يتم العثور على مستندات
