@@ -169,6 +169,7 @@ const CaseWorkspace: React.FC = () => {
           mb: 2,
           alignSelf: msg.type === "user" ? "flex-end" : "flex-start",
           maxWidth: "80%",
+          minHeight: "fit-content",
           bgcolor: msg.type === "user" ? "primary.main" : "background.paper",
           color: msg.type === "user" ? "primary.contrastText" : "text.primary",
         }}
@@ -212,7 +213,18 @@ const CaseWorkspace: React.FC = () => {
               )}
             </Box>
           )}
-          <Typography variant="caption" color="text.secondary">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{
+              color: msg.type === "user" ? "#ffffff" : "black",
+              mt: 1,
+              fontSize: 10,
+              fontWeight: "bold",
+              display: "block",
+              textAlign: msg.type === "user" ? "right" : "left",
+            }}
+          >
             {msg.timestamp.toLocaleTimeString()}
           </Typography>
         </CardContent>
