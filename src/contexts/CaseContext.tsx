@@ -181,6 +181,17 @@ export const CaseProvider: React.FC<{ children: React.ReactNode }> = ({
         prev ? { ...prev, ...updates, updatedAt: new Date() } : null
       );
     }
+    try {
+      await fetch(`http://localhost:5000/api/cases/${caseId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updates),
+      });
+    } catch (error) {
+      console.error("Failed to update case in backend:", error);
+    }
   };
 
   const sendMessage = async (
